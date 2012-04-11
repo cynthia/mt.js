@@ -15,6 +15,11 @@ Most of the MT implementations (including the reference) are distributed
 under a BSD license, which couldn't be used in a specific use case where
 I couldn't display the necessary copyright information.
 
+License
+-------
+
+This is distributed under the [Artistic License 2.0][artistic_license].
+
 Usage Example
 -------------
 
@@ -27,3 +32,4 @@ Usage Example
 
 [mersenne_twister]:http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html
 [original_source]:http://www.takel.jp/mt/MersenneTwister.cs
+[artistic_license]:http://www.opensource.org/licenses/artistic-license-2.0
