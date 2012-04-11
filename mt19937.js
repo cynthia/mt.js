@@ -14,28 +14,28 @@ var MersenneTwister = function() {
 
     // Period parameters
 
-    this.N = 624;
-    this.M = 397;
+    var N = 624;
+    var M = 397;
 
-    this.MATRIX_A   = 0x9908b0df; // Constant vector
-    this.UPPER_MASK = 0x80000000; // Most significant w-r bits
-    this.LOWER_MASK = 0x7fffffff; // Least significant r bits
+    var MATRIX_A   = 0x9908b0df; // Constant vector
+    var UPPER_MASK = 0x80000000; // Most significant w-r bits
+    var LOWER_MASK = 0x7fffffff; // Least significant r bits
 
     // Tempering parameters
 
-    this.TEMPERING_MASK_B = 0x9d2c5680;
-    this.TEMPERING_MASK_C = 0xefc60000;
+    var TEMPERING_MASK_B = 0x9d2c5680;
+    var TEMPERING_MASK_C = 0xefc60000;
 
-    this.TEMPERING_SHIFT_U = function(y) { return (y >> 11); }
-    this.TEMPERING_SHIFT_S = function(y) { return (y <<  7); }
-    this.TEMPERING_SHIFT_T = function(y) { return (y << 15); }
-    this.TEMPERING_SHIFT_L = function(y) { return (y >> 18); }
+    var TEMPERING_SHIFT_U = function(y) { return (y >> 11); }
+    var TEMPERING_SHIFT_S = function(y) { return (y <<  7); }
+    var TEMPERING_SHIFT_T = function(y) { return (y << 15); }
+    var TEMPERING_SHIFT_L = function(y) { return (y >> 18); }
 
-    this.RAND_MAX = 2147483648;
+    var RAND_MAX = 2147483648;
 
-    this.mt = [];
-    this.mti = 0;
-    this.mag01 = [0x0, this.MATRIX_A];
+    var mt = [];
+    var mti = 0;
+    var mag01 = [0x0, MATRIX_A];
 
     this.init = function(seed) {
 
@@ -50,10 +50,10 @@ var MersenneTwister = function() {
 
         }
 
-        this.mt[0] = seed & 0xffffffff;
+        mt[0] = seed & 0xffffffff;
 
-        for (this.mti = 1; this.mti < this.N; this.mti++)
-            this.mt[this.mti] = (69069 * this.mt[this.mti - 1]) & 0xffffffff
+        for (mti = 1; mti < N; mti++)
+            mt[mti] = (69069 * mt[mti - 1]) & 0xffffffff
 
     };
 
@@ -62,33 +62,33 @@ var MersenneTwister = function() {
         var y;
 
         // mag01[x] = x * MATRIX_A  for x=0,1
-        if (this.mti >= this.N) // generate N words at one time
+        if (mti >= N) // generate N words at one time
         {
             var kk = 0;
 
-            for (; kk < this.N - this.M; ++kk)
+            for (; kk < N - M; ++kk)
             {
-                y = (this.mt[kk] & this.UPPER_MASK) | (this.mt[kk + 1] & this.LOWER_MASK);
-                this.mt[kk] = this.mt[kk + this.M] ^ (y >> 1) ^ this.mag01[y & 0x1];
+                y = (mt[kk] & UPPER_MASK) | (mt[kk + 1] & LOWER_MASK);
+                mt[kk] = mt[kk + M] ^ (y >> 1) ^ mag01[y & 0x1];
             }
 
-            for(;kk < this.N - 1; ++kk)
+            for(;kk < N - 1; ++kk)
             {
-                y = (this.mt[kk] & this.UPPER_MASK) | (this.mt[kk + 1] & this.LOWER_MASK);
-                this.mt[kk] = this.mt[kk+(this.M - this.N)] ^ (y >> 1) ^ this.mag01[y & 0x1];
+                y = (mt[kk] & UPPER_MASK) | (mt[kk + 1] & LOWER_MASK);
+                mt[kk] = mt[kk+(M - N)] ^ (y >> 1) ^ mag01[y & 0x1];
             }
 
-            y = (this.mt[this.N - 1] & this.UPPER_MASK) | (this.mt[0] & this.LOWER_MASK);
-            this.mt[this.N - 1] = this.mt[this.M - 1] ^ (y >> 1) ^ this.mag01[y & 0x1];
+            y = (mt[N - 1] & UPPER_MASK) | (mt[0] & LOWER_MASK);
+            mt[N - 1] = mt[M - 1] ^ (y >> 1) ^ mag01[y & 0x1];
 
-            this.mti = 0;
+            mti = 0;
         }
 
-        y = this.mt[this.mti++];
-        y ^= this.TEMPERING_SHIFT_U(y);
-        y ^= this.TEMPERING_SHIFT_S(y) & this.TEMPERING_MASK_B;
-        y ^= this.TEMPERING_SHIFT_T(y) & this.TEMPERING_MASK_C;
-        y ^= this.TEMPERING_SHIFT_L(y);
+        y = mt[mti++];
+        y ^= TEMPERING_SHIFT_U(y);
+        y ^= TEMPERING_SHIFT_S(y) & TEMPERING_MASK_B;
+        y ^= TEMPERING_SHIFT_T(y) & TEMPERING_MASK_C;
+        y ^= TEMPERING_SHIFT_L(y);
 
         return y;
 
@@ -160,7 +160,7 @@ var MersenneTwister = function() {
 
     this.nextDouble = function() {
 
-        return this.generateUInt() / (this.RAND_MAX + 1);
+        return this.generateUInt() / (RAND_MAX + 1);
 
     };
 
