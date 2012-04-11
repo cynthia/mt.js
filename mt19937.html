@@ -1,0 +1,154 @@
+<html>
+<head>
+<script src="mt19937.js"></script>
+<script>
+var mt;
+
+var start_time;
+var end_time;
+
+var results = [0, 0, 0, 0, 0, 0, 0, 0];
+var run_count = 1000;
+
+var tmp;
+
+function benchmark_seeding()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.init();
+	    
+	end_time = new Date() - start_time;
+	
+	results[0] = end_time;        
+}
+
+function benchmark_seeding_with_seed()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.init(4357);
+	    
+	end_time = new Date() - start_time;
+	
+	results[1] = end_time;
+}
+
+function benchmark_ints()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.nextInt();
+	    
+	end_time = new Date() - start_time;
+	
+	results[2] = end_time;
+}
+
+function benchmark_ints_with_max()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.nextInt(100);
+	    
+	end_time = new Date() - start_time;
+	
+	results[3] = end_time;
+}
+
+function benchmark_ints_with_minmax()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.nextInt(1, 100);
+	    
+	end_time = new Date() - start_time;
+	
+	results[4] = end_time;
+}
+
+function benchmark_floats()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.next();
+	    
+	end_time = new Date() - start_time;
+	
+	results[5] = end_time;    
+}
+
+function benchmark_floats_with_max()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.next(5.5);
+	    
+	end_time = new Date() - start_time;
+	
+	results[6] = end_time;    
+}
+
+function benchmark_floats_with_minmax()
+{
+    start_time = new Date();
+
+	for (var i = 0; i < run_count; i++)
+	    tmp = mt.next(0.5, 5.5);
+	    
+	end_time = new Date() - start_time;
+	
+	results[7] = end_time;
+}
+
+function start()
+{
+    mt = new MersenneTwister();
+    
+    document.getElementById('count').innerHTML = run_count;
+    
+    benchmark_seeding();
+    benchmark_seeding_with_seed();
+    
+    benchmark_ints();
+    benchmark_ints_with_max();
+    benchmark_ints_with_minmax();
+    
+    benchmark_floats();
+    benchmark_floats_with_max();
+    benchmark_floats_with_minmax();
+    
+    document.getElementById('res_0').innerHTML = results[0];
+    document.getElementById('res_1').innerHTML = results[1];
+    document.getElementById('res_2').innerHTML = results[2];
+    document.getElementById('res_3').innerHTML = results[3];
+    document.getElementById('res_4').innerHTML = results[4];
+    document.getElementById('res_5').innerHTML = results[5];
+    document.getElementById('res_6').innerHTML = results[6];
+    document.getElementById('res_7').innerHTML = results[7];
+}
+
+</script>
+</head>
+<body onload="start();">
+	<h1>mt.js Benchmark Results</h1>
+	<h3>Benchmark rounds performed per item: <span id="count">0</span></h3>
+	<ul>
+	    <li>Seeding with dynamic seed: <span id="res_0">0</span>ms</li>
+	    <li>Seeding with static seed: <span id="res_1">0</span>ms</li>
+	    <li>Ints: <span id="res_2">0</span>ms</li>
+	    <li>Ints with max: <span id="res_3">0</span>ms</li>
+	    <li>Ints with min/max: <span id="res_4">0</span>ms</li>
+	    <li>Floats: <span id="res_5">0</span>ms</li>
+	    <li>Floats with max: <span id="res_6">0</span>ms</li>
+        <li>Floats with min/max: <span id="res_7">0</span>ms</li>
+    </ul>
+</body>
+</html>
